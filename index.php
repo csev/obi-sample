@@ -28,3 +28,10 @@ $encrypted = bin2hex(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), $_GET['
 <img src="<?php echo($encrypted); ?>.png"></a>
 <p>You can download the baked badge and then upload it to see 
 the metadata that was put in during the baking process.</p>
+<p>
+TODO: I still cannot figure how to get my badge into my backpack at 
+<a href="https://backpack.openbadges.org/" target="_blank">https://backpack.openbadges.org/</a>.
+<p>
+The source code to this project is at 
+<a href="https://github.com/csev/obi-sample" target="_blank">https://github.com/csev/obi-sample</a>.
+Comments welcome.
