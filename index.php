@@ -29,9 +29,9 @@ if ( ! isset($_GET['email']) ) return;
 
 $encrypted = bin2hex(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), $_GET['email'], MCRYPT_MODE_CBC, md5(md5($PASSWORD))));  
 ?>
-<p>Here is the badge baked especially for for <?php echo(htmlspecialchars($_GET['email'])); ?> <br/>
+<p>Here is the badge baked especially for for <?php echo(htmlspecialchars($_GET['email'])); ?> 
 <a href="<?php echo($encrypted); ?>.png" target="_blank">
-<img src="<?php echo($encrypted); ?>.png"></a>
+<img style="vertical-align: middle" width="90" src="<?php echo($encrypted); ?>.png"></a>
 <p>
 <a href="#" onclick="OpenBadges.issue(
 ['http://www.dr-chuck.com/obi-sample/assert.php?id=<?php echo($encrypted); ?>'],
