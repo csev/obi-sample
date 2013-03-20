@@ -1,0 +1,6 @@
+RewriteEngine on
+
+RewriteBase /obi-sample/
+
+RewriteRule ^(.*)\.png$ baker.php [NC]
+
