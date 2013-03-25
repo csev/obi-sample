@@ -25,7 +25,7 @@ You can upload any OBI badge and look at its meta-data
 <?php
 require_once "config.php";
 
-if ( ! isset($_GET['email']) ) return;
+if ( isset($_GET['email']) ) {
 
 $encrypted = bin2hex(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), $_GET['email'], MCRYPT_MODE_CBC, md5(md5($PASSWORD))));  
 ?>
@@ -42,6 +42,7 @@ web site or maually upload it to your
 <a href="http://beta.openbadges.org" target="_blank">Mozilla Badge Backpack</a>.
 You can also uploaded the image above to dump out the metadata in the image.
 </p>
+<?php } ?>
 <p>
 Note: This site uses a badge-baking technique that does not require any permanent storage
 of any of your data.  This site does not even have a database.  Take a look at the source code 
