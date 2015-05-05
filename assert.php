@@ -3,6 +3,7 @@
 // https://github.com/mozilla/openbadges/wiki/Assertions
 
 require_once "config.php";
+require_once "util.php";
 
 if ( !isset($_GET['id']) ) die("Missing id parameter");
 
@@ -12,22 +13,33 @@ $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), hex2bin($
 $recepient = 'sha256$' . hash('sha256', $decrypted . $ASSERT_SALT);
 
 // header('Content-Type: application/json');
-?>
-{
-  "recipient": "<?php echo($recepient); ?>",
-  "salt": "<?php echo($ASSERT_SALT); ?>",
-  "issued_on": "2013-19-03",
-  "badge": {
-    "version": "1.0.0",
-    "name": "Dr. Chuck's Easy-Bake Badge Baker",
-    "image": "http:\/\/www.dr-chuck.com\/obi-sample\/badge-baker.png",
-    "description": "A person was clever enough to find the easiest badge to earn in the world..",
-    "criteria": "http:\/\/www.dr-chuck.com\/",
-    "issuer": {
-      "origin": "http:\/\/www.dr-chuck.com",
-      "name": "Easy Badge Baker",
-      "org": "Dr. Chuck"
-    }
+$raw = '{
+  "recipient": {
+    "type": "email",
+    "hashed": true,
+    "salt": "deadsea",
+    "identity": "sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5"
+  },
+  "image": "https://example.org/beths-robot-badge.png",
+  "evidence": "https://example.org/beths-robot-work.html",
+  "issuedOn": 1359217910,
+  "badge": "https://example.org/robotics-badge.json",
+  "verify": {
+    "type": "hosted",
+    "url": "https://example.org/beths-robotics-badge.json"
   }
-}
+}';
 
+$json = json_decode($raw);
+if ( json_last_error() != JSON_ERROR_NONE ) {
+    die(json_last_error_msg());
+}
+$json->recipient->salt = $ASSERT_SALT;
+$json->recipient->identity = $recepient;
+$json->image = str_replace("assert.php", "badge-baker.png", curPageUrl() );
+$json->evidence = str_replace("assert.php", "index.php", curPageUrl() );
+$json->badge = str_replace("assert.php", "badge-info.php", curPageUrl() );
+$json->verify->url = str_replace("assert.php", "verify.php", curPageUrl() );
+
+echo("<pre>\n");var_dump($json);echo("</pre>\n");
+//echo(json_encode($json));

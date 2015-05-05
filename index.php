@@ -22,6 +22,39 @@ You can upload any OBI badge and look at its meta-data
 <input type="file" name="upload">
 <input type="submit">
 </form>
+<p>
+Validate Badge Contents:
+<?php
+$recepient = '';
+$salt = '';
+$val_email = '';
+if ( isset($_POST['recepient']) && isset($_POST['salt']) &&
+    isset($_POST['val_email']) ) {
+    $recepient = $_POST['recepient'];
+    $salt = $_POST['salt'];
+    $val_email = $_POST['val_email'];
+    $val_check = 'sha256$' . hash('sha256', $val_email . $salt);
+    if ( $recepient == $val_check ) {
+        echo(' <span style="color: green">Validated!</span>');
+    }
+    echo("<br>\n");
+    echo("Computed SHA: ".$val_check);
+    echo("<br>\n");
+}
+?>
+<form method="post">
+Recipient: 
+<input type="string" name="recepient" size="80"
+value="<?= htmlentities($recepient) ?>"><br/>
+Salt: 
+<input type="string" name="salt" size="80"
+value="<?= htmlentities($salt) ?>"><br/>
+Email: 
+<input type="string" name="val_email" size="80"
+value="<?= htmlentities($val_email) ?>"><br/>
+<input type="submit" name="validate" value="Validate">
+</form>
+</p>
 <?php
 require_once "config.php";
 
@@ -32,12 +65,7 @@ $encrypted = bin2hex(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), $_GET['
 <p>Here is the badge baked especially for for <?php echo(htmlspecialchars($_GET['email'])); ?> 
 <a href="<?php echo($encrypted); ?>.png" target="_blank">
 <img style="vertical-align: middle" width="90" src="<?php echo($encrypted); ?>.png"></a>
-<p>
-<a href="#" onclick="OpenBadges.issue(
-['http://www.dr-chuck.com/obi-sample/assert.php?id=<?php echo($encrypted); ?>'],
-function(errors, successes) { });">Add this Badge to my Mozilla Badge Backpack</a>
-</p>
-<p>You can also download the baked badge image to your computer and display it on your 
+<p>You can download the baked badge image to your computer and display it on your 
 web site or maually upload it to your
 <a href="http://beta.openbadges.org" target="_blank">Mozilla Badge Backpack</a>.
 You can also uploaded the image above to dump out the metadata in the image.
@@ -53,6 +81,10 @@ The source code to this project is at
 <a href="https://github.com/csev/obi-sample" target="_blank">https://github.com/csev/obi-sample</a>.
 Comments welcome.
 </p>
+<p>
+The OBE 1.0 Specification
+<a href="https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md" 
+target="_blank">is here</a>.
 <p>
 <a href="http://www.dr-chuck.com/">Dr. Chuck</a>
 Tue Mar 19 23:41:50 EDT 2013
