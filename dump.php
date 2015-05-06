@@ -2,8 +2,14 @@
 Dumping PNG Metadata
 
 <?php
+require("util.php");
 
-$png = file_get_contents($_FILES['upload']['tmp_name']); 
+if ( isset($_POST['url']) ) {
+    echo("Retrieving ".$_POST['url']."\n...\n");
+    $png = urlGET($_POST['url']); 
+} else {
+    $png = file_get_contents($_FILES['upload']['tmp_name']); 
+}
 
 echo("File length:".strlen($png)."\n");
 

@@ -17,7 +17,7 @@ $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), hex2bin($
 // Make the badge
 $file = 'badge-baker.png';
 $png = file_get_contents($file);
-$png2 = addOrReplaceTextInPng($png,"openbadges",curPageUrl()."/assert.php?id=".$encrypted);
+$png2 = addOrReplaceTextInPng($png,"openbadges",str_replace("baker.php","assert.php?id=".$encrypted, curPageUrl()));
 
 header('Content-Type: image/png');
 header('Content-Length: ' . strlen($png2));
