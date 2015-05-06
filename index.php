@@ -77,10 +77,6 @@ Badge File to Dump:
 <input type="file" name="upload"><br/>
 <input type="submit" value="Retrieve Badge Metadata">
 </form>
-<p>
-Once you dump the badge metadata, you will see an assertion URL, 
-which can be used as an assertion URL below.
-<p>
 <?php
 if ( isset($_POST['ver_url']) && isset($_POST['ver_email']) ) {
     $ver_url = $_POST['ver_url'];
@@ -110,6 +106,11 @@ if ( isset($_POST['ver_url']) && isset($_POST['ver_email']) ) {
     if ( $recepient != $val_check ) {
         echo("<pre>\n");echo($response);echo("</pre>\n");
     }
+}
+
+if ( strlen($ver_url) > 0 ) {
+    echo('<p><a href="'.$ver_url.'" target="_blank">');
+    echo("View Assertion Data</a> (new window)</p>\n");
 }
 ?>
 <p>
@@ -145,8 +146,8 @@ if ( isset($_POST['recepient']) && isset($_POST['salt']) &&
 }
 ?>
 <p>
-Assertion Data:
 <form method="post">
+Assertion Data:<br/>
 Recipient: 
 <input type="string" name="recepient" size="80"
 value="<?= htmlentities($recepient) ?>"><br/>
@@ -174,11 +175,12 @@ Comments welcome.
 </p>
 <p>
 These badges meet the 
+<a href="http://specification.openbadges.org/history/1.1.html"
+target="_blank">Open Badges 1.1 Specification</a>.
+The
 <a href="https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md" 
-target="_blank">Open Badges 1.0 Specification</a>.
-The <a href="http://specification.openbadges.org/history/1.1.html"
-target="_blank">Open Badges 1.1 Specification</a> 
-extends the badge metadata formats using JSON-LD.
+target="_blank">Open Badges 1.0 Specification</a> 
+is also available.
 <p>
 <a href="http://www.dr-chuck.com/">Dr. Chuck</a>
-Wed May  6 05:54:18 EDT 2015
+Wed May  6 06:27:42 EDT 2015

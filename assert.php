@@ -14,6 +14,9 @@ $recepient = 'sha256$' . hash('sha256', $decrypted . $ASSERT_SALT);
 
 // header('Content-Type: application/json');
 $raw = '{
+  "@context": "http://w3id.org/openbadges/v1",
+  "type": "Assertion",
+  "id": "http://mydomain.org/assertion/50",
   "recipient": {
     "type": "email",
     "hashed": true,
@@ -34,6 +37,7 @@ $json = json_decode($raw);
 if ( json_last_error() != JSON_ERROR_NONE ) {
     die(json_last_error_msg());
 }
+$json->id = str_replace("assert.php", "assert/".$encrypted, curPageUrl() );
 $json->recipient->salt = $ASSERT_SALT;
 $json->recipient->identity = $recepient;
 $json->image = str_replace("assert.php", "badge-baker.png", curPageUrl() );
