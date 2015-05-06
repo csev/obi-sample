@@ -1,6 +1,7 @@
 <?php
 require_once "config.php";
 require("util.php");
+require("baker-lib.php");
 
 $encrypted = false;
 $email = '';
