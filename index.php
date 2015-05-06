@@ -19,10 +19,10 @@ if ( isset($_GET['email']) ) {
 ?>
 <html>
 <head>
-<title>The World's Easiest Mozilla Open Badge Maker (Beta)</title>
+<title>The World's Easiest Open Badge Maker</title>
 </head>
 <body style="font-family:sans-serif;">
-<h2>Welcome to the World's Easiest-To-Earn Mozilla Open Badge (Beta)</h2>
+<h2>Welcome to the World's Easiest-To-Earn Open Badge</h2>
 <form>
 <p>Enter E-Mail Address and Press Submit.  You need to use 
 a real E-Mail address if you 
