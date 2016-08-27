@@ -13,10 +13,13 @@
     // Strip out any existing text chunks with a particular key
     function removeTextChunks($key,$png) {
         // Read the magic bytes and verify
+        if ( strlen($png) < 8 ) {
+            throw new Exception('No data retrieved');
+        }
         $retval = substr($png,0,8);
         $ipos = 8;
         if ($retval != "\x89PNG\x0d\x0a\x1a\x0a")
-            throw new Exception('Is not a valid PNG image');
+            throw new Exception('Not a valid PNG image');
 
         // Loop through the chunks. Byte 0-3 is length, Byte 4-7 is type
         $chunkHeader = substr($png,$ipos,8);
@@ -76,6 +79,9 @@
 
 function extractBadgeInfo($png, $key='openbadges', $debug=false) {
     // Read the magic bytes and verify
+    if ( strlen($png) < 8 ) {
+        return 'No data retrieved';
+    }
     $retval = substr($png,0,8);
     $ipos = 8;
     if ($retval != "\x89PNG\x0d\x0a\x1a\x0a") {
