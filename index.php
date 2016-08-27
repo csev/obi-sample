@@ -19,10 +19,10 @@ if ( isset($_GET['email']) ) {
 ?>
 <html>
 <head>
-<title>The World's Easiest Open Badge Maker</title>
+<title>The World's Easiest Open Badge Maker/Validator</title>
 </head>
 <body style="font-family:sans-serif;">
-<h2>Welcome to the World's Easiest-To-Earn Open Badge</h2>
+<h2>Welcome to the World's Easiest-To-Earn Open Badge and Badge Validator</h2>
 <form>
 <p>Enter E-Mail Address and Press Submit.  You need to use 
 a real E-Mail address if you 
@@ -65,11 +65,12 @@ if ( isset($_POST['url']) || isset($_FILES['upload']) ) {
     }
     echo("</pre>\n");
 }
+if ( strlen($badge_url)<1 && isset($_GET['url']) ) $badge_url = $_GET['url'];
 ?>
 
 
 <p>
-<form method="post" enctype="multipart/form-data">
+<form method="post" action="index.php" enctype="multipart/form-data">
 Badge URL to Retrieve and Dump:<br/>
 <input type="text" name="url" size="90"
 value="<?= htmlentities($badge_url) ?>"><br/>
