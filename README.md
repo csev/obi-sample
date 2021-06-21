@@ -15,6 +15,8 @@ https://www.imsglobal.org/sites/default/files/Badges/OBv2p0Final/baking/index.ht
 
 https://openbadgesvalidator.imsglobal.org
 
+    {"email": "drchuck@gmail.com"}
+
 https://badgecheck.io/
 
 Notes
