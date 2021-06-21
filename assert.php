@@ -8,7 +8,13 @@ require_once "util.php";
 if ( !isset($_GET['id']) ) die("Missing id parameter");
 
 $encrypted = $_GET['id'];
-$decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), hex2bin($encrypted), MCRYPT_MODE_CBC, md5(md5($PASSWORD))), "\0");
+
+// https://www.programmersought.com/article/50052172083/
+// $encrypted = bin2hex(openssl_encrypt($_GET['email'], 'DES-EDE3-CBC', md5($PASSWORD), OPENSSL_RAW_DATA|OPENSSL_NO_PADDING, $iv));
+// $decrypt = openssl_decrypt(base64_decode($b),'DES-EDE3-CBC',$key,OPENSSL_RAW_DATA|OPENSSL_NO_PADDING,$iv);
+// $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), hex2bin($encrypted), MCRYPT_MODE_CBC, md5(md5($PASSWORD))), "\0");
+$iv = '&11r2(*3';
+$decrypted = openssl_decrypt(hex2bin($encrypted),'DES-EDE3-CBC',md5($PASSWORD),OPENSSL_RAW_DATA,$iv);
 
 $recepient = 'sha256$' . hash('sha256', $decrypted . $ASSERT_SALT);
 

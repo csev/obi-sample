@@ -13,7 +13,15 @@ $ver_email = '';
 $baseUrl = str_replace("index.php","",curPageUrl());
 if ( isset($_GET['email']) ) {
     $email = $_GET['email'];
-    $encrypted = bin2hex(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), $_GET['email'], MCRYPT_MODE_CBC, md5(md5($PASSWORD))));  
+    // $encrypted = bin2hex(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($PASSWORD), $_GET['email'], MCRYPT_MODE_CBC, md5(md5($PASSWORD))));
+    // https://www.programmersought.com/article/50052172083/
+    // $b = base64_encode(openssl_encrypt($data,'DES-EDE3-CBC',$key,OPENSSL_RAW_DATA|OPENSSL_NO_PADDING,$iv));
+    $iv = '&11r2(*3';
+    var_dump($PASSWORD);
+    // $encrypted = bin2hex(openssl_encrypt($_GET['email'], 'DES-EDE3-CBC', md5($PASSWORD), OPENSSL_RAW_DATA|OPENSSL_NO_PADDING, $iv));
+    $encrypted = bin2hex(openssl_encrypt($_GET['email'], 'DES-EDE3-CBC', md5($PASSWORD), OPENSSL_RAW_DATA, $iv));
+    var_dump(openssl_encrypt($_GET['email'], 'DES-EDE3-CBC', md5($PASSWORD), OPENSSL_RAW_DATA|OPENSSL_NO_PADDING, $iv));
+    var_dump($encrypted);
     $badge_url = $baseUrl . $encrypted . '.png';
 }
 ?>
@@ -24,23 +32,23 @@ if ( isset($_GET['email']) ) {
 <body style="font-family:sans-serif;">
 <h2>Welcome to the World's Easiest-To-Earn Open Badge and Badge Validator</h2>
 <form>
-<p>Enter E-Mail Address and Press Submit.  You need to use 
-a real E-Mail address if you 
-want to put the badge be validatable and can be placed in 
+<p>Enter E-Mail Address and Press Submit.  You need to use
+a real E-Mail address if you
+want to put the badge be validatable and can be placed in
 a badge store that is based on your email address.
 <input type="text" name="email" size="40">
 <input type="submit" value="Bake My Badge">
 </form>
 <?php if ( $encrypted ) { ?>
-<p>Here is the badge baked especially for 
+<p>Here is the badge baked especially for
 for <?php echo(htmlspecialchars($_GET['email'])); ?> 
 <a href="<?php echo($encrypted); ?>.png" target="_blank">
 <img style="vertical-align: middle" width="90" src="<?php echo($encrypted); ?>.png"></a>
-<p>You can download the baked badge image to your computer and 
-display it on your 
+<p>You can download the baked badge image to your computer and
+display it on your
 web site or maually upload it to a badge store.
 </p>
-<?php } 
+<?php }
 
 if ( isset($_POST['url']) || isset($_FILES['upload']) ) {
     echo("<pre>\n");
@@ -119,7 +127,7 @@ if ( strlen($ver_url) > 0 ) {
 Verify A Badge Using Assertion URL:<br/>
 <input type="string" name="ver_url" size="80"
 value="<?= htmlentities($ver_url) ?>"><br/>
-Expected Email Address (required): 
+Expected Email Address (required):
 <input type="string" name="ver_email" size="40"
 value="<?= htmlentities($ver_email) ?>"><br/>
 <input type="submit" name="validate" value="Retrieve and Validate Assertion URL">
@@ -149,10 +157,10 @@ if ( isset($_POST['recepient']) && isset($_POST['salt']) &&
 <p>
 <form method="post">
 Assertion Data:<br/>
-Recipient: 
+Recipient:
 <input type="string" name="recepient" size="80"
 value="<?= htmlentities($recepient) ?>"><br/>
-Salt: 
+Salt:
 <input type="string" name="salt" size="80"
 value="<?= htmlentities($salt) ?>"><br/>
 Expected Email Address (required): 
