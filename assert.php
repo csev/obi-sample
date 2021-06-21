@@ -18,7 +18,7 @@ $decrypted = openssl_decrypt(hex2bin($encrypted),'DES-EDE3-CBC',md5($PASSWORD),O
 
 $recepient = 'sha256$' . hash('sha256', $decrypted . $ASSERT_SALT);
 
-// header('Content-Type: application/json');
+header('Content-Type: application/json');
 $raw = '{
   "@context": "http://w3id.org/openbadges/v1",
   "type": "Assertion",
