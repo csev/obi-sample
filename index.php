@@ -190,6 +190,9 @@ Comments welcome.
 These badges meet the 
 <a href="https://www.imsglobal.org/sites/default/files/Badges/OBv2p0Final/index.html"
 target="_blank">Open Badges 2.0 Specification</a>.
+Here is the 
+<a href="https://www.imsglobal.org/sites/default/files/Badges/OBv2p0Final/baking/index.html"
+target="_blank">how to bake a badge document from IMS</a>.
 <p>
 <a href="http://www.dr-chuck.com/">Dr. Chuck</a>
 Mon 21 Jun 2021 12:03:10 PM EDT

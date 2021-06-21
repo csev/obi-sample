@@ -3,18 +3,6 @@
 require("util.php");
 
 $raw = '{
-  "@context": "http://w3id.org/openbadges/v1",
-  "type": "BadgeClass",
-  "id": "http://mydomain.org/badges/1",
-  "name": "Simple Baking Badge",
-  "description": "The world\'s easiest badge to earn.",
-  "image": "https://example.org/robotics-badge.png",
-  "criteria": "https://example.org/robotics-badge.html",
-  "tags": ["simple", "awesome", "open source"],
-  "issuer": "https://example.org/organization.json"
-}';
-
-$raw = '{
   "@context": "https://w3id.org/openbadges/v2",
   "type": "BadgeClass",
   "id": "https://example.org/robotics-badge.json",

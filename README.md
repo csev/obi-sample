@@ -11,9 +11,16 @@ You can play with an online version of this here http://www.dr-chuck.com/obi-sam
 
 Here is a free site to make a nice 3D badge with an image http://www.onlinebadgemaker.com/
 
+https://www.imsglobal.org/sites/default/files/Badges/OBv2p0Final/baking/index.html
 
 https://openbadgesvalidator.imsglobal.org
 
 https://badgecheck.io/
+
+Notes
+-----
+
+Issuer.id must always by an HTTP(s) IRI, but badgeclass.id doesn't have to be, and
+assertion.id only has got to be a URL for hosted verification
 
 
