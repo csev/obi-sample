@@ -81,7 +81,7 @@ $json->recipient->identity = $recepient;
 $json->image = str_replace("assert.php", "badge-baker.png", curPageUrl() );
 $json->evidence = str_replace("assert.php", "index.php", curPageUrl() );
 $json->badge = str_replace("assert.php", "badge-info.php", curPageUrl() );
-$json->verify->url = str_replace("assert.php", "verify.php", curPageUrl() );
+// $json->verify->url = str_replace("assert.php", "verify.php", curPageUrl() );
 
 // echo("<pre>\n");var_dump($json);echo("</pre>\n");
 echo(json_encode($json, JSON_PRETTY_PRINT));
