@@ -19,7 +19,7 @@ if ( json_last_error() != JSON_ERROR_NONE ) {
 }
 
 // Patch the JSON
-$json->id = str_replace("badge-issuer.php", "", curPageUrl());
+$json->id = curPageUrl();
 $json->url = str_replace("badge-issuer.php", "", curPageUrl());
 $json->image = 'http://www.sakaiger.com/images/Sakaiger.png';
 $json->revocationList = str_replace("badge-issuer.php", "revoked.json", curPageUrl() );

@@ -17,11 +17,8 @@ if ( isset($_GET['email']) ) {
     // https://www.programmersought.com/article/50052172083/
     // $b = base64_encode(openssl_encrypt($data,'DES-EDE3-CBC',$key,OPENSSL_RAW_DATA|OPENSSL_NO_PADDING,$iv));
     $iv = '&11r2(*3';
-    var_dump($PASSWORD);
     // $encrypted = bin2hex(openssl_encrypt($_GET['email'], 'DES-EDE3-CBC', md5($PASSWORD), OPENSSL_RAW_DATA|OPENSSL_NO_PADDING, $iv));
     $encrypted = bin2hex(openssl_encrypt($_GET['email'], 'DES-EDE3-CBC', md5($PASSWORD), OPENSSL_RAW_DATA, $iv));
-    var_dump(openssl_encrypt($_GET['email'], 'DES-EDE3-CBC', md5($PASSWORD), OPENSSL_RAW_DATA|OPENSSL_NO_PADDING, $iv));
-    var_dump($encrypted);
     $badge_url = $baseUrl . $encrypted . '.png';
 }
 ?>
@@ -170,6 +167,13 @@ value="<?= htmlentities($ver_email) ?>"><br/>
 </form>
 </p>
 <p>
+Other validators:
+<ul>
+<li><a href="https://openbadgesvalidator.imsglobal.org" target="_blank">https://openbadgesvalidator.imsglobal.org</a></li>
+<li><a href="https://badgecheck.io" target="_blank">https://badgecheck.io</a></li>
+</ul>
+</p>
+<p>
 Note: This site uses a badge-baking technique that does not 
 require any permanent storage of any of your data.  This 
 site does not even have a database.  A typical implementation would
@@ -184,12 +188,8 @@ Comments welcome.
 </p>
 <p>
 These badges meet the 
-<a href="http://specification.openbadges.org/history/1.1.html"
-target="_blank">Open Badges 1.1 Specification</a>.
-The
-<a href="https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md" 
-target="_blank">Open Badges 1.0 Specification</a> 
-is also available.
+<a href="https://www.imsglobal.org/sites/default/files/Badges/OBv2p0Final/index.html"
+target="_blank">Open Badges 2.0 Specification</a>.
 <p>
 <a href="http://www.dr-chuck.com/">Dr. Chuck</a>
-Wed May  6 06:27:42 EDT 2015
+Mon 21 Jun 2021 12:03:10 PM EDT
