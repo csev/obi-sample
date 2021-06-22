@@ -170,7 +170,7 @@ value="<?= htmlentities($salt) ?>"><br/>
 Expected Email Address (required): 
 <input type="string" name="ver_email" size="40"
 value="<?= htmlentities($ver_email) ?>"><br/>
-<input type="submit" name="validate" value="Validate Using Asserton Data">
+<input type="submit" name="validate" value="Validate Using Assertion Data">
 </form>
 </p>
 <p>
