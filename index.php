@@ -7,6 +7,7 @@ $encrypted = false;
 $email = '';
 $badge_url='';
 $ver_url = '';
+$ver_data = '';
 $recepient = '';
 $salt = '';
 $ver_email = '';
@@ -65,8 +66,8 @@ if ( isset($_POST['url']) || isset($_FILES['upload']) ) {
     if ( is_string($sections) ) {
         echo('Error in badge metadata: '.$sections."\n");
     } else {
-        $ver_url = $sections[1];
-        echo("Badge assertion url:\n".$sections[1]."\n");
+        $ver_data = $sections[1];
+        echo("Badge assertion data:\n".$sections[1]."\n");
     }
     echo("</pre>\n");
 }
@@ -114,9 +115,15 @@ if ( isset($_POST['ver_url']) && isset($_POST['ver_email']) ) {
     }
 }
 
-if ( strlen($ver_url) > 0 ) {
-    echo('<p><a href="'.$ver_url.'" target="_blank">');
-    echo("View Assertion Data</a> (new window)</p>\n");
+if ( strlen($ver_data) > 0 ) {
+    if ( strpos($ver_data, '{') !== 0 ) {
+        $ver_url = $ver_data;
+        echo('<p><a href="'.$ver_url.'" target="_blank">');
+        echo("View Assertion Data</a> (new window)</p>\n");
+    } else {
+        $json  = json_decode($ver_data);
+        if ( isset($json->id) ) $ver_url = $json->id;
+    }
 }
 ?>
 <p>

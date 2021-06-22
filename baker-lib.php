@@ -3,15 +3,16 @@
 // Adapted from
 // http://stackoverflow.com/questions/8842387/php-add-itxt-comment-to-a-png-image
 
-    function addOrReplaceTextInPng($png,$key,$text) {
-        $png = removeTextChunks($key, $png);
-        $chunk = phpTextChunk($key,$text);
+    function addOrReplaceTextInPng($png,$key,$text,$type=false) {
+        $png = removeTextChunks($key, $png, $type);
+        $chunk = phpTextChunk($key,$text, $type);
         $png2 = addPngChunk($chunk,$png);
         return $png2;
     }
 
     // Strip out any existing text chunks with a particular key
-    function removeTextChunks($key,$png) {
+    function removeTextChunks($key,$png, $type=false) {
+        $chunktype = is_string($type) ? $type : 'tEXt';
         // Read the magic bytes and verify
         if ( strlen($png) < 8 ) {
             throw new Exception('No data retrieved');
@@ -28,7 +29,7 @@
             // Extract length and type from binary data
             $chunk = @unpack('Nsize/a4type', $chunkHeader);
             $skip = false;
-            if ( $chunk['type'] == 'tEXt' ) {
+            if ( $chunk['type'] == $chunktype ) {
                 $data = substr($png,$ipos,$chunk['size']);
                 $sections = explode("\0", $data);
                 print_r($sections);
@@ -51,8 +52,8 @@
 
     // creates a tEXt chunk with given key and text (iso8859-1)
     // ToDo: check that key length is less than 79 and that neither includes null bytes
-    function phpTextChunk($key,$text) {
-        $chunktype = "tEXt";
+    function phpTextChunk($key,$text,$type=false) {
+        $chunktype = is_string($type) ? $type : 'tEXt';
         $chunkdata = $key . "\0" . $text;
         $crc = pack("N", crc32($chunktype . $chunkdata));
         $len = pack("N",strlen($chunkdata));
@@ -97,7 +98,7 @@ function extractBadgeInfo($png, $key='openbadges', $debug=false) {
         $chunk = @unpack('Nsize/a4type', $chunkHeader);
         if( $debug ) echo("\n".htmlentities($chunk['type'])." (".$chunk['size'].")\n");
         $skip = false;
-        if ( $chunk['type'] == 'tEXt' ) {
+        if ( $chunk['type'] == 'tEXt' || $chunk['type'] == 'iTXt') {
             $data = substr($png,$ipos,$chunk['size']);
             $sections = explode("\0", $data);
             if ( $debug ) print_r($sections);
@@ -146,3 +147,46 @@ Array
 
 IEND (0)
 */
+
+function get_assert()
+{
+    $raw = '{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Assertion",
+  "id": "https://example.org/beths-robotics-badge.json",
+  "recipient": {
+    "type": "email",
+    "hashed": true,
+    "salt": "deadsea",
+    "identity": "sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5"
+  },
+  "issuedOn": "2016-12-31T23:59:59Z",
+  "badge": {
+    "id": "https://example.org/robotics-badge.json",
+    "type": "BadgeClass",
+    "name": "Awesome Robotics Badge",
+    "description": "For doing awesome things with robots that people think is pretty great.",
+    "image": "https://example.org/robotics-badge.png",
+    "criteria": "https://example.org/robotics-badge.html",
+    "issuer": {
+      "type": "Profile",
+      "id": "https://example.org/organization.json",
+      "name": "An Example Badge Issuer",
+      "image": "https://example.org/logo.png",
+      "url": "https://example.org",
+      "email": "steved@example.org"
+    }
+  },
+  "verification": {
+    "type": "hosted"
+  }
+}';
+
+    $json = json_decode($raw);
+    if ( json_last_error() != JSON_ERROR_NONE ) {
+        die(json_last_error_msg());
+    }
+    return $json;
+
+}
+

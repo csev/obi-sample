@@ -4,6 +4,7 @@
 
 require_once "config.php";
 require_once "util.php";
+require_once "baker-lib.php";
 
 if ( !isset($_GET['id']) ) die("Missing id parameter");
 
@@ -19,70 +20,15 @@ $decrypted = openssl_decrypt(hex2bin($encrypted),'DES-EDE3-CBC',md5($PASSWORD),O
 $recepient = 'sha256$' . hash('sha256', $decrypted . $ASSERT_SALT);
 
 header('Content-Type: application/json');
-$raw = '{
-  "@context": "http://w3id.org/openbadges/v1",
-  "type": "Assertion",
-  "id": "http://mydomain.org/assertion/50",
-  "recipient": {
-    "type": "email",
-    "hashed": true,
-    "salt": "deadsea",
-    "identity": "sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5"
-  },
-  "image": "https://example.org/beths-robot-badge.png",
-  "evidence": "https://example.org/beths-robot-work.html",
-  "issuedOn": 1359217910,
-  "badge": "https://example.org/robotics-badge.json",
-  "verify": {
-    "type": "hosted",
-    "url": "https://example.org/beths-robotics-badge.json"
-  }
-}';
 
-$raw = '{
-  "@context": "https://w3id.org/openbadges/v2",
-  "type": "Assertion",
-  "id": "https://example.org/beths-robotics-badge.json",
-  "recipient": {
-    "type": "email",
-    "hashed": true,
-    "salt": "deadsea",
-    "identity": "sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5"
-  },
-  "issuedOn": "2016-12-31T23:59:59Z",
-  "badge": {
-    "id": "https://example.org/robotics-badge.json",
-    "type": "BadgeClass",
-    "name": "Awesome Robotics Badge",
-    "description": "For doing awesome things with robots that people think is pretty great.",
-    "image": "https://example.org/robotics-badge.png",
-    "criteria": "https://example.org/robotics-badge.html",
-    "issuer": {
-      "type": "Profile",
-      "id": "https://example.org/organization.json",
-      "name": "An Example Badge Issuer",
-      "image": "https://example.org/logo.png",
-      "url": "https://example.org",
-      "email": "steved@example.org"
-    }
-  },
-  "verification": {
-    "type": "hosted"
-  }
-}';
+$json = get_assert();
 
-$json = json_decode($raw);
-if ( json_last_error() != JSON_ERROR_NONE ) {
-    die(json_last_error_msg());
-}
-// $json->id = str_replace("assert.php", "assert/".$encrypted, curPageUrl() );
 $json->id = curPageUrl() . '?id=' . $encrypted;
 $json->recipient->salt = $ASSERT_SALT;
 $json->recipient->identity = $recepient;
 $json->image = str_replace("assert.php", "badge-baker.png", curPageUrl() );
 $json->evidence = str_replace("assert.php", "index.php", curPageUrl() );
 $json->badge = str_replace("assert.php", "badge-info.php", curPageUrl() );
-// $json->verify->url = str_replace("assert.php", "verify.php", curPageUrl() );
 
 // echo("<pre>\n");var_dump($json);echo("</pre>\n");
 echo(json_encode($json, JSON_PRETTY_PRINT));

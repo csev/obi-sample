@@ -29,8 +29,27 @@ $iv = '&11r2(*3';
 $decrypted = openssl_decrypt(hex2bin($encrypted),'DES-EDE3-CBC',md5($PASSWORD),OPENSSL_RAW_DATA,$iv);
 
 // Make the badge
+$assert = get_assert();
+$iv = '&11r2(*3';
+
+$recepient = 'sha256$' . hash('sha256', $decrypted . $ASSERT_SALT);
+
+header('Content-Type: application/json');
+
+$json = get_assert();
+
+$json->id = str_replace("baker.php", "assert.php", curPageUrl() ) . '?id=' . $encrypted;
+$json->recipient->salt = $ASSERT_SALT;
+$json->recipient->identity = $recepient;
+$json->image = str_replace("baker.php", "badge-baker.png", curPageUrl() );
+$json->evidence = str_replace("baker.php", "index.php", curPageUrl() );
+$json->badge = str_replace("baker.php", "badge-info.php", curPageUrl() );
+
+// echo("<pre>\n");var_dump($json);echo("</pre>\n");
+$text = json_encode($json, JSON_PRETTY_PRINT);
+
 $png = file_get_contents($file);
-$png2 = addOrReplaceTextInPng($png,"openbadges",str_replace("baker.php","assert.php?id=".$encrypted, curPageUrl()));
+$png2 = addOrReplaceTextInPng($png,"openbadges",$text, 'iTXt');
 
 header('Content-Type: image/png');
 header('Content-Length: ' . strlen($png2));
