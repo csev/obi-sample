@@ -77,17 +77,46 @@ if ( isset($_POST['url']) || isset($_FILES['upload']) ) {
 }
 if ( strlen($badge_url)<1 && isset($_GET['url']) ) $badge_url = $_GET['url'];
 
+// Check the id of the assertion
+if ( isset($ver_json->id) && is_string($ver_json->id) ) {
+    $url = $ver_json->id;
+    $assertion = urlGET($url);
+    echo("Retrieved $url\nReceived ".strlen($assertion)." bytes\n");
+    $json = json_decode($assertion);
+    if ( is_object($json) ) {
+        if ( isset($json->id) && is_string($json->id) && $json->id == $url) {        
+            echo("Assertion id value matches id value in retrieved assertion\n");
+            echo("\n");
+        } else {
+            echo("Assertion id mismatch:\n");
+            echo("Embedded assertion id:  ".htmlentities($ver_json->id)."\n");
+            echo("Retrieved assertion id: ".htmlentities($ver_json->id)."\n");
+            echo(htmlentities($assertion));
+            echo("\n");
+        }
+    } else {
+        echo(htmlentities($assertion));
+        echo("\n");
+        echo("Could not parse issuer JSON ".json_last_error());
+    }
+}
 
 // Retrieve any extra documents
 if ( isset($ver_json->badge) && is_object($ver_json->badge) ) {
     echo("Found inline badge data\n");
 } else if ( isset($ver_json->badge) && is_string($ver_json->badge) ) {
-    $badge = urlGET($ver_json->badge);
-    echo("Retrieved $ver_json->badge\nReceived ".strlen($badge)." bytes\n");
+    $url = $ver_json->badge;
+    $badge = urlGET($url);
+    echo("Retrieved $url\nReceived ".strlen($badge)." bytes\n");
     echo(htmlentities($badge));
     echo("\n");
     $json = json_decode($badge);
     if ( is_object($json) ) {
+        if ( isset($json->id) && is_string($json->id) && $json->id == $url) {        
+            // Good.
+        } else {
+            echo("Badge id should be the same as its url\n");
+        }
         $ver_json->badge = $json;
     } else {
         echo("Could not parse badge JSON ".json_last_error());
@@ -101,8 +130,14 @@ if ( isset($ver_json->badge->issuer) && is_object($ver_json->badge->issuer) ) {
     $issuer = urlGET($url);
     echo("Retrieved $url\nReceived ".strlen($issuer)." bytes\n");
     echo(htmlentities($issuer));
+    echo("\n");
     $json = json_decode($issuer);
     if ( is_object($json) ) {
+        if ( isset($json->id) && is_string($json->id) && $json->id == $url) {        
+            // Good.
+        } else {
+            echo("Issuer id should be the same as its url\n");
+        }
         $ver_json->badge->issuer = $json;
     } else {
         echo("Could not parse issuer JSON ".json_last_error());
