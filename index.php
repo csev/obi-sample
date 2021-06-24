@@ -48,6 +48,7 @@ web site or maually upload it to a badge store.
 </p>
 <?php }
 
+$ver_json = false;
 if ( isset($_POST['url']) || isset($_FILES['upload']) ) {
     echo("<pre>\n");
     if ( isset($_FILES['upload']) && isset($_FILES['upload']['size']) &&
@@ -68,10 +69,47 @@ if ( isset($_POST['url']) || isset($_FILES['upload']) ) {
     } else {
         $ver_data = $sections[1];
         echo("Badge assertion data:\n".$sections[1]."\n");
+        $ver_json = json_decode($ver_data);
+        if ( ! is_object($ver_json) ) {
+            echo("Could not parse assertion JSON ".json_last_error());
+        }
     }
-    echo("</pre>\n");
 }
 if ( strlen($badge_url)<1 && isset($_GET['url']) ) $badge_url = $_GET['url'];
+
+
+// Retrieve any extra documents
+if ( isset($ver_json->badge) && is_object($ver_json->badge) ) {
+    echo("Found inline badge data\n");
+} else if ( isset($ver_json->badge) && is_string($ver_json->badge) ) {
+    $badge = urlGET($ver_json->badge);
+    echo("Retrieved $ver_json->badge\nReceived ".strlen($badge)." bytes\n");
+    echo(htmlentities($badge));
+    echo("\n");
+    $json = json_decode($badge);
+    if ( is_object($json) ) {
+        $ver_json->badge = $json;
+    } else {
+        echo("Could not parse badge JSON ".json_last_error());
+    }
+}
+
+if ( isset($ver_json->badge->issuer) && is_object($ver_json->badge->issuer) ) {
+    echo("Found inline issuer data\n");
+} else if ( isset($ver_json->badge->issuer) && is_string($ver_json->badge->issuer) ) {
+    $url = $ver_json->badge->issuer;
+    $issuer = urlGET($url);
+    echo("Retrieved $url\nReceived ".strlen($issuer)." bytes\n");
+    echo(htmlentities($issuer));
+    $json = json_decode($issuer);
+    if ( is_object($json) ) {
+        $ver_json->badge->issuer = $json;
+    } else {
+        echo("Could not parse issuer JSON ".json_last_error());
+    }
+}
+
+echo("</pre>\n");
 ?>
 
 
